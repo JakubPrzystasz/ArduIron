@@ -1,0 +1,245 @@
+{
+  "uuid": "c51fec756a4a10815f5c62052ec09faa",
+  "path": "Offline/Stacja lutownicza v2",
+  "name": "Stacja lutownicza v2",
+  "content": "",
+  "created_at": "2020-08-05 12:44:23",
+  "updated_at": "2020-09-07 09:58:03",
+  "stick": "",
+  "documents": [
+    {
+      "uuid": "afc4ae0da9173ef4ee5fb22932416e61",
+      "title": "Sheet_1",
+      "description": "",
+      "docType": "1",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "36628af0fe3849a2f482991ed56c81b7": 1,
+        "36c2a1fe48092fa21412b5776b8551c7": 1,
+        "6185e8d48bd54f1186d884f9e93bc072": 3,
+        "a18f9c944c9b494fb3a3efd2f9c02f31": 3,
+        "e6459d06dbca4c39b87f046a4e5c9da1": 1,
+        "b87008dbfeda49968cc2df355f6e4c7f": 1,
+        "8465becc3bff41548ad2a9e3c3898726": 3,
+        "6f4513a7903d5b38a9cda37a4f2671b7": 1,
+        "32ddd8193cb040c299c6cc36d33d2478": 9
+      },
+      "BOM": [
+        [
+          "Value",
+          "Quantity",
+          "Package",
+          "Components",
+          "CustomPara"
+        ],
+        [
+          "PSU",
+          1,
+          "CONN-TH_3P-P5.00_WJ103V-3P",
+          "CN1",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "ReliaPro",
+            "BOM_Manufacturer Part": "WJ103-5.00-3P",
+            "BOM_Supplier Part": "C8427",
+            "puuid": "959ea4ba2be840a195bfb24f1515edf3",
+            "uuid": "6f4513a7903d5b38a9cda37a4f2671b7"
+          }
+        ],
+        [
+          "10k",
+          9,
+          "PKG-0.25W RESISTOR",
+          "R9,R8,R7,R6,R5,R4,R3,R2,R1",
+          {
+            "BOM_Supplier Part": "9339116",
+            "BOM_Supplier": "Element14",
+            "BOM_Manufacturer": "MULTICOMP",
+            "BOM_Manufacturer Part": "MCF 0.25W 10K",
+            "puuid": "dff2fd11cc5847c1b17800fc58573077",
+            "uuid": "32ddd8193cb040c299c6cc36d33d2478"
+          }
+        ],
+        [
+          "CRYSTAL",
+          1,
+          "HC-49S",
+          "X1",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "LCSC",
+            "BOM_Manufacturer Part": "49S9M20PF20PPMROHS",
+            "BOM_Supplier Part": "C52064",
+            "puuid": "8357f310e7924727b4d1e20223ef2095",
+            "uuid": "36c2a1fe48092fa21412b5776b8551c7"
+          }
+        ],
+        [
+          "22pF",
+          2,
+          "CAP-TH_L7.2-W2.5-P5.00-D0.6",
+          "C2,C1",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C401099",
+            "BOM_Manufacturer": "CHAMPION",
+            "BOM_Manufacturer Part": "SMEC224J100M2",
+            "puuid": "bd322da8d42d42d5a97dd2518841c371",
+            "uuid": "6185e8d48bd54f1186d884f9e93bc072"
+          }
+        ],
+        [
+          "0.1uF",
+          1,
+          "CAP-TH_L7.2-W2.5-P5.00-D0.6",
+          "C3",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C401099",
+            "BOM_Manufacturer": "CHAMPION",
+            "BOM_Manufacturer Part": "SMEC224J100M2",
+            "puuid": "bd322da8d42d42d5a97dd2518841c371",
+            "uuid": "6185e8d48bd54f1186d884f9e93bc072"
+          }
+        ],
+        [
+          "DESOLDER_CONN",
+          1,
+          "CONN-TH_2P-P2.54_JL301-50002U02",
+          "U3",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C395214",
+            "BOM_Manufacturer": "JILN",
+            "BOM_Manufacturer Part": "JL301-50002U02",
+            "puuid": "28daaf73004e447e9629f01456920cb3",
+            "uuid": "8465becc3bff41548ad2a9e3c3898726"
+          }
+        ],
+        [
+          "VACCUM_CONN",
+          1,
+          "CONN-TH_2P-P2.54_JL301-50002U02",
+          "U4",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C395214",
+            "BOM_Manufacturer": "JILN",
+            "BOM_Manufacturer Part": "JL301-50002U02",
+            "puuid": "28daaf73004e447e9629f01456920cb3",
+            "uuid": "8465becc3bff41548ad2a9e3c3898726"
+          }
+        ],
+        [
+          "SOLDER_CONN",
+          1,
+          "CONN-TH_2P-P2.54_JL301-50002U02",
+          "U2",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Supplier Part": "C395214",
+            "BOM_Manufacturer": "JILN",
+            "BOM_Manufacturer Part": "JL301-50002U02",
+            "puuid": "28daaf73004e447e9629f01456920cb3",
+            "uuid": "8465becc3bff41548ad2a9e3c3898726"
+          }
+        ],
+        [
+          "ATMEGA",
+          1,
+          "DIP-28_L34.6-W7.3-P2.54-LS10.2-BL",
+          "ATMEGA",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "MICROCHIP",
+            "BOM_Manufacturer Part": "ATMEGA328P-PU",
+            "BOM_Supplier Part": "C33901",
+            "puuid": "2f1d96128ab94db491eae99d61bfb39c",
+            "uuid": "36628af0fe3849a2f482991ed56c81b7"
+          }
+        ],
+        [
+          "IRF520",
+          3,
+          "TO-220-3_L10.0-W4.5-P2.54-T",
+          "IRF_SOLDER_MOSFET,IRF_VACCUM_MOSFET,IRF_DESOLDER_MOSFET",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "IR",
+            "BOM_Manufacturer Part": "IRF520NPBF",
+            "BOM_Supplier Part": "C2598",
+            "puuid": "fb8b10620b5a459d9b03fd14987346f4",
+            "uuid": "a18f9c944c9b494fb3a3efd2f9c02f31"
+          }
+        ],
+        [
+          "CONNECTOR",
+          1,
+          "IDC16 2.54 28X8.7 MM",
+          "U1",
+          {
+            "BOM_Manufacturer": "",
+            "BOM_Manufacturer Part": "",
+            "BOM_Supplier Part": "",
+            "BOM_Supplier": "",
+            "puuid": "73e8fc58c1cd4507a60c4f8381a18f01",
+            "uuid": "b87008dbfeda49968cc2df355f6e4c7f"
+          }
+        ],
+        [
+          "OPTOCOUPLER",
+          1,
+          "DIP-16_16P-L20.2-W6.6-P2.54-LS7.6-BL",
+          "LTV-847",
+          {
+            "BOM_Supplier": "LCSC",
+            "BOM_Manufacturer": "LITEON",
+            "BOM_Manufacturer Part": "LTV-847",
+            "BOM_Supplier Part": "C10794",
+            "puuid": "a8834d810e384ae1bfe2643c5db26b52",
+            "uuid": "e6459d06dbca4c39b87f046a4e5c9da1"
+          }
+        ]
+      ],
+      "updateTime": 1599391293,
+      "createTime": 1596632005,
+      "histories": [],
+      "created_at": "2020-08-05 14:53:25",
+      "updated_at": "2020-09-06 13:21:33"
+    },
+    {
+      "uuid": "d6a19f3940c8ef0e90f6bd6761ee7cc8",
+      "puuid": "c51fec756a4a10815f5c62052ec09faa",
+      "title": "PCB_2020-08-06_14-32-30",
+      "filename": "PCB_2020-08-06_14-32-30.json",
+      "description": "",
+      "docType": "3",
+      "master": "",
+      "thumb": "/images/thumb-default.png",
+      "components": {
+        "959ea4ba2be840a195bfb24f1515edf3": 1,
+        "dff2fd11cc5847c1b17800fc58573077": 6,
+        "8357f310e7924727b4d1e20223ef2095": 1,
+        "bd322da8d42d42d5a97dd2518841c371": 3,
+        "28daaf73004e447e9629f01456920cb3": 3,
+        "2f1d96128ab94db491eae99d61bfb39c": 1,
+        "fb8b10620b5a459d9b03fd14987346f4": 3,
+        "73e8fc58c1cd4507a60c4f8381a18f01": 2,
+        "a8834d810e384ae1bfe2643c5db26b52": 1,
+        "ef10e215415a49a49cdabc8e1fed0af1": 2
+      },
+      "BOM": [],
+      "updateTime": 1599465483,
+      "createTime": 1596717151,
+      "histories": [],
+      "created_at": "2020-08-06 14:32:31",
+      "updated_at": "2020-09-07 09:58:03"
+    }
+  ],
+  "sort": [],
+  "title": "Stacja lutownicza v2",
+  "foldername": "Stacja lutownicza v2",
+  "schfilename": "Stacja lutownicza v2.json",
+  "schfilemtime": 1599391293243
+}

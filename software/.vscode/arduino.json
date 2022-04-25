@@ -1,0 +1,7 @@
+{
+    "board": "arduino:avr:nano",
+    "sketch": "solder_station.ino",
+    "programmer": "arduino:avrispmkii",
+    "port": "/dev/ttyUSB0",
+    "configuration": "cpu=atmega328"
+}
