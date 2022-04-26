@@ -1,6 +1,6 @@
 # ArduIron
 
-Hobbyst project of soldering station for daily amateur use.</br>
+Hobbyist project of soldering station for daily amateur use.</br>
 For controlling power of soldering irons, it uses discrete PID controller with serial communication for tuning live
 
 # Real photo
