@@ -7,7 +7,6 @@
 #include <EEPROM.h>
 #include <max6675.h>
 #include <Bounce2.h>
-#include <PID_v1.h>
 
 enum CHANNEL
 {
@@ -61,7 +60,7 @@ char lcd_arrow_up[] = {0x04, 0x0E, 0x15, 0x04, 0x04, 0x04, 0x04, 0x00};
 #define LCD_FRAME_TIME 250
 // Degree character
 #define LCD_DEG_CHAR 223
-#define STR_BUFFER_SIZE 32
+#define STR_BUFFER_SIZE 64
 
 // Hardware pins definitions:
 // I2C BUS:
