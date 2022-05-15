@@ -578,9 +578,10 @@ void pid_compute(IRON *obj)
 
     if (obj->previous_read_time >= obj->previous_pid_time)
     {
+        unsigned long _millis = millis();
         float error = (obj->set_point - obj->temperature);
         float delta_error = (error - obj->previous_error);
-        float sample_time = (float)(millis() - obj->previous_pid_time);
+        float sample_time = (float)(_millis - obj->previous_pid_time);
         float lim_max_integ, lim_min_integ;
 
         obj->proportional = obj->settings.Kp * error;
@@ -610,6 +611,6 @@ void pid_compute(IRON *obj)
 
         obj->previous_error = error;
         obj->previous_temperature = obj->temperature;
-        obj->previous_pid_time = millis();
+        obj->previous_pid_time = _millis;
     }
 }
