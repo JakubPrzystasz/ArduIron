@@ -250,7 +250,9 @@ void serial_process()
                     obj->settings.tau = atoi(serial_buffer + tokens[3].index);
                     Serial.print(F("New Tau in: "));
                     Serial.println(obj->name);
-                }else goto set_typo;
+                }
+                else
+                    goto set_typo;
             }
             else
             set_typo:
@@ -579,12 +581,28 @@ void pid_compute(IRON *obj)
         float error = (obj->set_point - obj->temperature);
         float delta_error = (error - obj->previous_error);
         float sample_time = (float)(millis() - obj->previous_pid_time);
+        float lim_max_integ, lim_min_integ;
 
         obj->proportional = obj->settings.Kp * error;
 
         obj->integral += (0.5f * obj->settings.Kp * sample_time * (error + obj->previous_error));
 
-        obj->integral = constrain(obj->integral, obj->settings.min, obj->settings.max);
+        if (obj->settings.max > obj->proportional)
+            lim_max_integ = obj->settings.max - obj->proportional;
+        else
+            lim_max_integ = 0.0f;
+
+        if (obj->settings.min < obj->proportional)
+            lim_max_integ = obj->settings.min - obj->proportional;
+        else
+            lim_min_integ = 0.0f;
+
+        // Constrain Integrator
+        if (obj->integral > lim_max_integ)
+            obj->integral = lim_max_integ;
+
+        else if (obj->integral < lim_min_integ)
+            obj->integral = lim_min_integ;
 
         obj->derivative = (2.0f * obj->settings.Kd * (obj->temperature - obj->previous_temperature) + (2.0f * obj->settings.tau - sample_time) * obj->derivative) / (2.0f * obj->settings.tau + sample_time);
 
