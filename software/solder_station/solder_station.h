@@ -18,6 +18,8 @@
 #define MAX6675_INIT_DELAY 1000LU
 #define MAX6675_ACQ_INTERVAL 230LU
 #define MAX6675_AVG_ALPHA 0.1f
+#define MAX6675_MAX_TEMP 1000.f
+#define MAX6675_MIN_TEMP 0.0f
 
 // PID
 #define PID_INTERVAL_F 250.f
@@ -91,7 +93,7 @@ typedef struct IRON
         pinMode(_OUT_PIN, OUTPUT);
         analogWrite(_OUT_PIN, 0);
         eeprom_addr = EEPROM_ADDR;
-        read_eeprom();
+        EEPROM.get(eeprom_addr, settings);
     };
 
     void save_eprom(void){
@@ -115,7 +117,10 @@ typedef struct IRON
             value = tc.readCelsius();
             if (temperature < 0.0f)
                 temperature = value;
-            temperature = round((MAX6675_AVG_ALPHA * value) + (1.0f - MAX6675_AVG_ALPHA) * temperature);
+            temperature = constrain(
+                    round((MAX6675_AVG_ALPHA * value) + (1.0f - MAX6675_AVG_ALPHA) * temperature),
+                    MAX6675_MIN_TEMP,
+                    MAX6675_MAX_TEMP);
             previous_read_time = _tmp;
         }
     }
@@ -144,10 +149,9 @@ typedef struct IRON
 #define LCD_COLS 20
 // Screen refresh interval
 #define LCD_FRAME_TIME 500
-// Degree character
 #define STR_BUFFER_SIZE 64
 #define FLOAT_PRECISION 7
-#define BUFFER_INDEX(x) (x > (STR_BUFFER_SIZE - 1) ? (x=0) : x++)
+#define BUFFER_INDEX_INC(x) (x > (STR_BUFFER_SIZE - 1) ? (x=0) : x++)
 
 // Hardware pins definitions:
 // I2C BUS:

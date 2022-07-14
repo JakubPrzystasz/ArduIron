@@ -6,7 +6,7 @@ IRON solder("Solder", SOLDER_CS, SOLDER_PWM_PIN, SOLDER_EEPROM_ADDR),
     desolder("Desolder", DESOLDER_CS, DESOLDER_PWM_PIN, DESOLDER_EEPROM_ADDR);
 Bounce SWITCH[SW_COUNT];
 TOKEN tokens[TOKEN_MAX];
-char serial_buffer[STR_BUFFER_SIZE], serial_input_char, serial_tmp_index = -1;
+char serial_buffer[STR_BUFFER_SIZE], serial_input_char, serial_tmp_index = 0;
 char lcd_buffer[STR_BUFFER_SIZE], lcd_refresh = 1, channel, prev_channel;
 unsigned long last_frame = 0, last_temp_acquisition = 0, last_button = 0;
 
@@ -24,6 +24,7 @@ void setup(void)
         SWITCH[i] = Bounce();
         SWITCH[i].interval(SW_BOUNCE_INTERVAL);
     }
+    
     SWITCH[SW_L].attach(SW_L_PIN, INPUT_PULLUP);
     SWITCH[SW_C].attach(SW_C_PIN, INPUT_PULLUP);
     SWITCH[SW_R].attach(SW_R_PIN, INPUT_PULLUP);
@@ -31,9 +32,9 @@ void setup(void)
     SWITCH[SW_DOWN].attach(SW_DOWN_PIN, INPUT_PULLUP);
 
     // Initialize Serial communication:
-    Serial.begin(SERIAL_BAUD_RATE);
-    Serial.println(F("Initializing..."));
-    Serial.println(F("To show help type: help"));
+    Serial.begin(115200);
+    Serial.println("Initializing...");
+    Serial.println("To show help type: help");
 
     // Initialize LCD:
     LCD.init();
@@ -97,11 +98,11 @@ void loop(void)
 
 void serial_process()
 {
-    if (serial_input_char != '\r')
-        serial_buffer[BUFFER_INDEX(serial_tmp_index)] = serial_input_char;
-    else
+    if (serial_input_char != '\n')
+        serial_buffer[BUFFER_INDEX_INC(serial_tmp_index)] = serial_input_char;
+    else if(serial_buffer[(serial_tmp_index - 1)] == '\r')
     {
-        serial_buffer[BUFFER_INDEX(serial_tmp_index)] = 0;
+        serial_buffer[serial_tmp_index] = 0;
         // Get tokens from input string:
         char token_count = 0, tmp = 0, token_id = 0;
         for (char i = 0; i < serial_tmp_index; i++)
@@ -119,6 +120,7 @@ void serial_process()
                 tmp = 0;
             }
         }
+        
         serial_tmp_index = 0;
 
         if (match_str(F("help"), tokens[0]))
@@ -259,7 +261,8 @@ void serial_process()
                 Serial.println(F("Type: set [solder,desolder] [setpoint,holdpoint,min,max,Kp,Kd,Ki,Tau] value"));
             return;
         }
-
+        return;
+        
         INVALID_COMMAND;
         memset(&tokens, 0, sizeof(TOKEN) * TOKEN_MAX);
     }
