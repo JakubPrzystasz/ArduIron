@@ -25,7 +25,7 @@
 #define PID_INTERVAL_F 250.f
 #define PID_INTERVAL 250LU
 
-typedef struct TOKEN{
+struct TOKEN{
     char index;
     char length;
 };
@@ -46,7 +46,7 @@ enum CHANNEL
 };
 
 // Structures
-typedef struct PID_settings
+struct PID_settings
 {
     // Kp -  proportional gain
     float Kp;
@@ -64,12 +64,12 @@ typedef struct PID_settings
     float tau;
 };
 
-typedef struct IRON
+struct IRON
 {
     const char *name;
     char output_pin;
-    char raw_output;
     char hold_flag;
+    float raw_output;
     float power;
     float set_point;
     float temperature;
@@ -111,8 +111,8 @@ typedef struct IRON
     void read_temp(void)
     {
         float value;
-        unsigned long _tmp = millis();
-        if ((_tmp - previous_read_time) >= MAX6675_ACQ_INTERVAL)
+        unsigned long _millis = millis();
+        if ((_millis - previous_read_time) >= MAX6675_ACQ_INTERVAL)
         {
             value = tc.readCelsius();
             if (temperature < 0.0f)
@@ -121,20 +121,26 @@ typedef struct IRON
                     round((MAX6675_AVG_ALPHA * value) + (1.0f - MAX6675_AVG_ALPHA) * temperature),
                     MAX6675_MIN_TEMP,
                     MAX6675_MAX_TEMP);
-            previous_read_time = _tmp;
+            previous_read_time = _millis;
         }
     }
 
     void write_output(void)
     {
+      int value = (int)power;
+      value = constrain(value,0,255);
+      //char tmp[10];
+      //sprintf(tmp,"V: %d",value);
+      //Serial.println(tmp);
+ 
         // Write output
         switch (control)
         {
         case CONTROL::MANUAL:
-            analogWrite(output_pin, (uint8_t)(round(power)));
+            analogWrite(output_pin, value);
             break;
         case CONTROL::AUTOMATIC:
-            analogWrite(output_pin, raw_output);
+            analogWrite(output_pin, value);
             break;
         default:
             analogWrite(output_pin, 0);
@@ -161,7 +167,7 @@ typedef struct IRON
 // Output to MOSFET gates:
 #define SOLDER_PWM_PIN 9
 #define DESOLDER_PWM_PIN 3
-#define MAX_CELSIUS_OUTPUT 500.0f
+#define MAX_CELSIUS_OUTPUT 999.0f
 #define MIN_CELSIUS_OUTPUT 0.0f
 
 // User interface switches:
@@ -187,7 +193,7 @@ typedef struct IRON
 #define THIRD_STAGE_DETLA 25.0f
 
 // Serial communication:
-#define SERIAL_BAUD_RATE 9600LU
+#define SERIAL_BAUD_RATE 115200LU
 #define TOKEN_MAX 5
 // Strings:
 #define VALUE_SET F("New value set")
@@ -215,5 +221,7 @@ void channel_solder(void);
 void channel_desolder(void);
 
 void pid_compute(IRON *obj);
+
+uint8_t round_to_nearest(uint8_t number, uint8_t multiple);
 
 #endif

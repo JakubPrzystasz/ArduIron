@@ -33,8 +33,11 @@ void setup(void)
 
     // Initialize Serial communication:
     Serial.begin(115200);
-    Serial.println("Initializing...");
-    Serial.println("To show help type: help");
+    if(Serial.available()){
+      Serial.println("Initializing...");
+      Serial.println("To show help type: help");
+    }
+
 
     // Initialize LCD:
     LCD.init();
@@ -63,8 +66,16 @@ void loop(void)
         channel = 0;
         channel = !SWITCH[SW_UP].read();
         channel |= !SWITCH[SW_DOWN].read() << 1;
-        if (prev_channel != channel)
+        
+        if (prev_channel != channel){
+            if(channel == CHANNEL::SOLDER){
+              solder.set_point = solder.previous_set_point;
+            }
+            if(channel == CHANNEL::DESOLDER){
+              desolder.set_point = desolder.previous_set_point;
+            }
             lcd_refresh = 1;
+        }
 
         switch (channel)
         {
@@ -446,6 +457,13 @@ void channel_idle(void)
     // Draw background
     if (lcd_refresh)
     {
+        solder.integral = 0.0f;
+        desolder.integral = 0.0f;
+        solder.power = 0.0f;
+        solder.raw_output = 0.0f;
+        desolder.power = 0.0f;
+        desolder.raw_output = 0.0f;
+        
         LCD.clear();
         LCD.setCursor(7, 0);
         LCD.print(F("Idle"));
@@ -476,8 +494,8 @@ void channel_iron(IRON *obj)
             obj->set_point += THIRD_STAGE_DETLA;
 
         if (obj->set_point > MAX_CELSIUS_OUTPUT)
-            obj->set_point = MIN_CELSIUS_OUTPUT;
-
+            obj->set_point = MAX_CELSIUS_OUTPUT;
+        //obj->previous_set_point = obj->set_point;
         last_button = millis();
     }
     // Subtraction
@@ -492,6 +510,7 @@ void channel_iron(IRON *obj)
 
         if (obj->set_point < MIN_CELSIUS_OUTPUT)
             obj->set_point = MIN_CELSIUS_OUTPUT;
+        //obj->previous_set_point = obj->set_point;
         last_button = millis();
     }
 
@@ -535,7 +554,8 @@ void channel_iron(IRON *obj)
         LCD.print("C");
 
         LCD.setCursor(12, 3);
-        dtostrf((obj->power / obj->settings.max * 100.0f), 3, 0, lcd_buffer);
+        dtostrf(round_to_nearest((obj->power / obj->settings.max * 100.0f),2), 3, 0, lcd_buffer);
+        //dtostrf(obj->raw_output,3,0,lcd_buffer);
         LCD.print(lcd_buffer);
         LCD.print("%");
     }
@@ -573,13 +593,13 @@ void channel_iron(IRON *obj)
 
 void pid_compute(IRON *obj)
 {
-    if (obj->set_point <= 35)
+    if (obj->set_point <= 25)
     {
         obj->power = 0;
         return;
     }
 
-    if (obj->previous_read_time >= obj->previous_pid_time)
+    if (obj->previous_read_time > obj->previous_pid_time)
     {
         unsigned long _millis = millis();
         float error = (obj->set_point - obj->temperature);
@@ -589,31 +609,38 @@ void pid_compute(IRON *obj)
 
         obj->proportional = obj->settings.Kp * error;
 
-        obj->integral += (0.5f * obj->settings.Kp * sample_time * (error + obj->previous_error));
-
+        obj->integral += (0.5f * obj->settings.Ki * sample_time / 1000 * (error + obj->previous_error));
+        
+        //Windup
         if (obj->settings.max > obj->proportional)
             lim_max_integ = obj->settings.max - obj->proportional;
         else
             lim_max_integ = 0.0f;
 
         if (obj->settings.min < obj->proportional)
-            lim_max_integ = obj->settings.min - obj->proportional;
+            lim_min_integ = obj->settings.min - obj->proportional;
         else
             lim_min_integ = 0.0f;
 
         // Constrain Integrator
-        if (obj->integral > lim_max_integ)
-            obj->integral = lim_max_integ;
-
-        else if (obj->integral < lim_min_integ)
-            obj->integral = lim_min_integ;
+        obj->integral = constrain(obj->integral, lim_min_integ, lim_max_integ);
 
         obj->derivative = (2.0f * obj->settings.Kd * (obj->temperature - obj->previous_temperature) + (2.0f * obj->settings.tau - sample_time) * obj->derivative) / (2.0f * obj->settings.tau + sample_time);
 
-        obj->raw_output = constrain(obj->proportional + obj->integral + obj->derivative, obj->settings.min, obj->settings.max);
-
+        obj->raw_output = obj->proportional + obj->integral + obj->derivative;
+        obj->raw_output = constrain(obj->raw_output, obj->settings.min, obj->settings.max);
+        obj->power = obj->raw_output;
+       
         obj->previous_error = error;
         obj->previous_temperature = obj->temperature;
         obj->previous_pid_time = _millis;
     }
+}
+
+uint8_t round_to_nearest(uint8_t number, uint8_t multiple){
+  uint8_t smallerMultiple = (number / multiple) * multiple;
+  uint8_t largerMultiple = smallerMultiple + multiple;
+
+  // Return of closest of two
+  return (number - smallerMultiple >= largerMultiple - number) ? largerMultiple : smallerMultiple;
 }
